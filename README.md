@@ -1,6 +1,6 @@
 # Getting Started with Create React App
 
-#This GH-pages deployed link will take you to the live application: https://github.com/RenishSalakhana/react-my-jobs
+# This GH-pages deployed link will take you to the live application: https://renishsalakhana.github.io/react-my-jobs/
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
