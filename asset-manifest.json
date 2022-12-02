@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/react-my-jobs/static/css/main.073c9b0a.css",
+    "main.js": "/react-my-jobs/static/js/main.98acf583.js",
+    "static/js/787.c008eacf.chunk.js": "/react-my-jobs/static/js/787.c008eacf.chunk.js",
+    "index.html": "/react-my-jobs/index.html",
+    "main.073c9b0a.css.map": "/react-my-jobs/static/css/main.073c9b0a.css.map",
+    "main.98acf583.js.map": "/react-my-jobs/static/js/main.98acf583.js.map",
+    "787.c008eacf.chunk.js.map": "/react-my-jobs/static/js/787.c008eacf.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.98acf583.js"
+  ]
+}
