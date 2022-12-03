@@ -15,11 +15,13 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import React, { useState } from "react";
 import GroupIcon from "@mui/icons-material/Group";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { Add, Delete, Edit } from "@mui/icons-material";
+import { Add, Delete, Edit, TenMp } from "@mui/icons-material";
 import AddJobModal from "./AddJobModal";
 
 export default function JobList() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+
+
 
   const [dataArray, setdataArray] = useState([
     // {
@@ -32,7 +34,12 @@ export default function JobList() {
     //   relevantHardSkill: [],
     // },
   ]);
-
+const [IsEdit,setEdit]=useState(false);
+const [updateIndex,setUpdateIndex]=useState(0)
+const updateModal=(IsEdit,UpdateIndex)=>{
+setEdit(IsEdit);
+setUpdateIndex(UpdateIndex)
+}
   const [data, setdata] = useState({
     JobTitle: "",
     JobLocation: [],
@@ -43,11 +50,15 @@ export default function JobList() {
     relevantHardSkill: [],
   });
 
+
+
   const open = Boolean(anchorEl);
   
   const handlechange = (e) => {
     setdata({ ...data, [e.target.name]: e.target.value });
   };
+
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -61,22 +72,63 @@ export default function JobList() {
   const handleModalOpen = () => {
     setOpenModal(!open);
   };
+
+  const [render, setRender] = React.useState("render");
+  const reRender = () => {
+    setRender((render === "render" ? "rerender" : "render"));
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+   
     try {
-      const res = await axios.post("https://reqres.in/api/users", data);
+     const res = await axios.post("https://reqres.in/api/users", data);
       console.log({ res:res.data });
       if (Object.keys(res.data).length > 0) {
-        setdataArray([...dataArray, res.data]);
+        if(IsEdit===true){
+          var tempdata=dataArray
+          tempdata[updateIndex]=res.data
+          setdataArray(tempdata)
+        }else{
+          setdataArray([...dataArray, res.data]);
+         
+        }
+        setdata({
+          JobTitle: "",
+          JobLocation: [],
+          jobDescription: "",
+          positiontype: "",
+          Seniority: "",
+          ClosestJobFunction: "",
+          relevantHardSkill: [],
+        })
+      
       }
+      
     } catch (error) {
       console.log(error);
     }
 
     console.log({ data });
+  
+  
+  
   };
+        
+  const updateData = (index) => {
+    console.log({index})
+    console.log({dataArray})
+    console.log({ind:dataArray[index]})
+    setdata(dataArray[index]);
+    setOpenModal(true);
+  }
 
+  const deleteData = (index)=>{
+   var temp = dataArray;
+   temp.splice(index, 1);
+      setdataArray(temp);
+      reRender();
+  }
+  
   return (
     <Paper elevation={4} sx={{ width: "80vw", height: "80vh", p: 5, m: 5 }}>
       <AddJobModal
@@ -84,7 +136,10 @@ export default function JobList() {
         handleModalClose={handleModalClose}
         handleSubmit={handleSubmit}
         handlechange={handlechange}
+        
         data={data}
+        key={render}
+        IsEdit={IsEdit}
       />
       <Grid container spacing={2}>
         <Grid item xs={12} md={12}>
@@ -101,16 +156,16 @@ export default function JobList() {
             <Button
               variant="contained"
               startIcon={<Add />}
-              onClick={handleModalOpen}
+              onClick={()=>{updateModal(false,0);handleModalOpen();}}
             >
               Add Jobs
             </Button>
           </Box>
           <Divider variant="middle" />
         </Grid>
-        {dataArray.map((ind) => {
+        {dataArray.map((ind,dataindex) => {
           return (
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} key={dataindex}>
               <Paper elevation={2} sx={{ borderRadius: 5, height: 70 }}>
                 <Box
                   sx={{
@@ -132,57 +187,20 @@ export default function JobList() {
                   </Box>{" "}
                   <Box>
                     <IconButton
-                      aria-label="more"
                       id="long-button"
-                      aria-controls={open ? "long-menu" : undefined}
-                      aria-expanded={open ? "true" : undefined}
-                      aria-haspopup="true"
-                      onClick={handleClick}
+                   
+                      onClick={()=>{updateModal(true,dataindex);updateData(dataindex);}}
                     >
-                      <MoreVertIcon />
+                      <Edit />
                     </IconButton>
-                    <Menu
-                      anchorEl={anchorEl}
-                      id="account-menu"
-                      open={open}
-                      onClose={handleClose}
-                      onClick={handleClose}
-                      PaperProps={{
-                        elevation: 0,
-                        sx: {
-                          overflow: "visible",
-                          filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.1))",
-                          mt: 1.5,
-                          "& .MuiAvatar-root": {
-                            width: 32,
-                            height: 32,
-                            ml: -0.5,
-                            mr: 1,
-                          },
-                          "&:before": {
-                            content: '""',
-                            display: "block",
-                            position: "absolute",
-                            top: 0,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            bgcolor: "background.paper",
-                            transform: "translateY(-50%) rotate(45deg)",
-                            zIndex: 0,
-                          },
-                        },
-                      }}
-                      transformOrigin={{ horizontal: "right", vertical: "top" }}
-                      anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                    <IconButton
+                      id="long-button"
+                    
+                      onClick={()=>deleteData(dataindex)}
                     >
-                      <MenuItem>
-                        <Edit /> Edit
-                      </MenuItem>
-                      <MenuItem>
-                        <Delete /> Delete
-                      </MenuItem>
-                    </Menu>
+                      <Delete />
+                    </IconButton>
+                   
                   </Box>
                 </Box>
               </Paper>
