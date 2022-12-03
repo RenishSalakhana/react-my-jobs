@@ -47,6 +47,7 @@ export default function AddJobModal({
   handleSubmit,
   handlechange,
   data,
+  IsEdit,
 }) {
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -59,23 +60,42 @@ export default function AddJobModal({
     },
   };
 
+  const [render, setRender] = React.useState("render");
+  const reRender = () => {
+    setRender(render === "render" ? "rerender" : "render");
+  };
+  React.useEffect(() => {
+    reRender();
+
+    return () => {
+      "second";
+    };
+  }, [open]);
+
   const LocationOptions = [
     "Ahmedabad",
     "Surat",
     "Vadodara",
-    "Waghodiya",
+    "Waghodia",
     "Lucknow",
-    "Udaypur",
+    "Udaipur",
     "Indore",
   ];
 
   const RelevantHardSkillsOptions = [
-    "ML",
+    "Machine Learning",
+    "Database and SQL",
+    "Cloud computing",
+    "Data Structures and Algorithms",
+    "Software Development",
+    "Software Testing",
     "JAVA",
-    "ReactJS",
+    "ReactJS ",
     "NodeJS",
+    "React Native",
     "MongoDB",
     "WebSocket.io",
+    "Teamwork and Debugging",
   ];
 
   function getStyles(name, Location, theme) {
@@ -95,13 +115,13 @@ export default function AddJobModal({
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={open}
-        onClose={() => {
-        }}
+        onClose={() => handleModalClose()}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
+        key={render}
       >
         <Fade in={open}>
           <Container component="main" maxWidth="lg" sx={styles}>
@@ -161,8 +181,14 @@ export default function AddJobModal({
                       label="Position Type"
                       onChange={handlechange}
                     >
-                      <MenuItem value={"fulltime"}>Full Time</MenuItem>
-                      <MenuItem value={"partTime"}>Part Time</MenuItem>
+                      <MenuItem value={"fulltime"}>
+                        Full-Time Employment
+                      </MenuItem>
+                      <MenuItem value={"partTime"}>
+                        Part-Time Employment
+                      </MenuItem>
+                      <MenuItem value={"contractbase"}>Contract based</MenuItem>
+                      <MenuItem value={"other"}>Others</MenuItem>
                     </TextField>
                   </Grid>
                   <Grid item xs={12} sm={12} lg={12}>
@@ -251,14 +277,13 @@ export default function AddJobModal({
                       fullWidth
                       id="Seniority"
                       label="Seniority"
-                      
                       onChange={handlechange}
                     >
                       <MenuItem value={"fulltime"}>Senior Developer</MenuItem>
                       <MenuItem value={"partTime"}>Junior Developer</MenuItem>
                       <MenuItem value={"partTime"}>Internship</MenuItem>
 
-                      <MenuItem value={"partTime"}>Trainee </MenuItem>
+                      <MenuItem value={"partTime"}>Trainee</MenuItem>
                     </TextField>
                   </Grid>
                   <Grid item xs={6} sm={6} lg={6}>
@@ -273,15 +298,26 @@ export default function AddJobModal({
                       id="Closest Job Function"
                       label="Closest Job Function"
                       autoFocus
-                       onChange={handlechange}
+                      onChange={handlechange}
                     >
-                      <MenuItem value={"fulltime"}>UI Designer </MenuItem>
-                      <MenuItem value={"partTime"}>UX Designer</MenuItem>
+                      <MenuItem value={"fulltime"}>
+                        MERN Stack Developer
+                      </MenuItem>
+                      <MenuItem value={"partTime"}>iOS Developer</MenuItem>
+                      <MenuItem value={"partTime"}>Data Analytics</MenuItem>
+                      <MenuItem value={"partTime"}>QA Engineer</MenuItem>
+                      <MenuItem value={"partTime"}>Business Analytics</MenuItem>
+                      <MenuItem value={"partTime"}>HR Manager</MenuItem>
                       <MenuItem value={"partTime"}>
-                        Front-End Developer
+                        Project Coordinator
+                      </MenuItem>
+                      <MenuItem value={"partTime"}>
+                        Front-End Developer(UI/UX)
                       </MenuItem>
                       <MenuItem value={"partTime"}>Back-End Developer</MenuItem>
-                      <MenuItem value={"partTime"}>Devops Engineer</MenuItem>
+                      <MenuItem value={"partTime"}>
+                        Full-Stack Developer
+                      </MenuItem>
                     </TextField>
                   </Grid>
                   <Grid item xs={12} sm={12} lg={12}>
@@ -299,7 +335,6 @@ export default function AddJobModal({
                         fullWidth
                         input={
                           <OutlinedInput
-
                             id="select-multiple-chip"
                             name="relevantHardSkill"
                             label="Relevant Hard Skill"
@@ -363,9 +398,12 @@ export default function AddJobModal({
                     color="primary"
                     variant="contained"
                     sx={{ mt: 1, mb: 1 }}
-                    onClick={(e) => handleSubmit(e)}
+                    onClick={(e) => {
+                      handleSubmit(e);
+                      handleModalClose();
+                    }}
                   >
-                    Save
+                    {IsEdit ? "Edit" : "Save"}
                   </Button>
                 </Grid>
               </Grid>
